@@ -26,32 +26,14 @@ contract("TestDyDxSoloMargin", (accounts) => {
     console.log("Deployed contract address: ", testDyDxSoloMargin.address.toString())
   })
 
-  it("Check if 1 ETH got deposited into contract", async () => {
+  it("Contract can be funded", async () => {
     
-    // await testDyDxSoloMargin.send(web3.utils.toWei(1, "ether"))
-    await testDyDxSoloMargin.sendTransaction({value: '1000000000000000'})
-    // const createTransaction = await web3.eth.accounts.signTransaction(
-    //     {         
-    //       to: testDyDxSoloMargin.address,
-    //       value: web3.utils.toWei('1', 'ether'),
-    //       gas: 3000000
-    //     },
-    //     '0x535615c933857afee77ef30da2fe4d04f42e09dc156757db6464a52ad4af4cc1'
-    // )
-
-    // const createReceipt = await web3.eth.sendSignedTransaction(createTransaction.rawTransaction);
-  //  console.log(`Transaction successful with hash: ${createReceipt.transactionHash}`);
-    
-    // await web3.eth.sendTransaction({
-    //     from: accounts[0],
-    //     to: testDyDxSoloMargin.address,
-    //     value: '1000000000000000'
-    // })
-
+    await testDyDxSoloMargin.sendTransaction({value: '1000000000000000000'})
     const contrBal = await web3.eth.getBalance(testDyDxSoloMargin.address)
+    const etherValue = Number(web3.utils.fromWei(contrBal, 'ether'))
     console.log("Deployed contract address inside IT: ", testDyDxSoloMargin.address.toString())
-    console.log("Contract balance after the top up is: ", contrBal.toString())
-    // assert(contrBal.gte(0), "Contract wasn't topped up")
+    console.log("Contract balance after the top up is: ", etherValue, " ETH")
+    assert.isAbove(etherValue, 0, "Contract wasn't topped up")
   })
 })
 

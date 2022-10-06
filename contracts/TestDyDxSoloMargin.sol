@@ -15,6 +15,8 @@ contract TestDyDxSoloMargin is ICallee, DydxFlashloanBase {
         uint repayAmount;
     }
 
+    ///@dev allow funding of the contract
+
     function() external payable {}
 
     function initiateFlashLoan(address _token, uint _amount) external {
