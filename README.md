@@ -1,10 +1,7 @@
 #Initiate truffle project
 truffle init
 
-#money-legos repo
-https://github.com/studydefi/money-legos
-
-#install it
+#install money-legos package
 npm install @studydefi/money-legos
 
 #install bn.js

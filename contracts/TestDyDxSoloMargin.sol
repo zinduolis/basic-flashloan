@@ -2,6 +2,12 @@
 pragma solidity >=0.4.22 <0.9.0;
 pragma experimental ABIEncoderV2;
 
+/// @title Basic contract to execute flashloan with dydx
+/// @author Red Graz
+/// @notice Use this contract as basis for DeFi with flashloans
+/// @dev Compiler for v0.5.7 is used due to @studydefi/money-legos dependency contracts. 
+/// @dev To use newer compiler version, bring the money-legos contracts into this project and massage them to work with it.
+
 import "@studydefi/money-legos/dydx/contracts/DydxFlashloanBase.sol";
 import "@studydefi/money-legos/dydx/contracts/ICallee.sol";
 
@@ -15,31 +21,22 @@ contract TestDyDxSoloMargin is ICallee, DydxFlashloanBase {
         uint repayAmount;
     }
 
-    ///@dev allow funding of the contract
+    /// @dev allow funding of the contract when compiled with Solidity < v0.6
 
     function() external payable {}
 
     function initiateFlashLoan(address _token, uint _amount) external {
         ISoloMargin solo = ISoloMargin(SOLO);
-        /*
-        0 - WETH
-        1 - SAI
-        2 - USDC
-        3 - DAI
-        */
+
+        /// @dev Market ID depends on coin: 0 for WETH, 1 - SAI, 2 - USDC and 3 - DAI
         uint marketId = _getMarketIdFromTokenAddress(SOLO, _token);
-        // Calculate repayment amount (_amount + 2 wei)
+        /// @dev Calculate repayment amount (_amount + 2 wei)
         uint repayAmount = _getRepaymentAmountInternal(_amount);
 
-        // @dev approve the repayment
+        /// @dev approve the repayment of the flash loabn
         IERC20(_token).approve(SOLO, repayAmount);
 
-        /*
-        Flash loan logic
-        1. Withdraw
-        2. Call callFunction()
-        3. Deposit back 
-        */
+       /// @dev Flash loan logic: withdraw, call callFunction() and repay loan
 
        Actions.ActionArgs[] memory operations = new Actions.ActionArgs[](3);
        operations[0] = _getWithdrawAction(marketId, _amount);
@@ -68,10 +65,10 @@ contract TestDyDxSoloMargin is ICallee, DydxFlashloanBase {
         uint bal = IERC20(mcd.token).balanceOf(address(this));
         require(bal >= repayAmount, "The balance of this contract is less than repayment amount!");
 
-        // Custom code to profit
+        /// @dev Here's the place for custom code to profit
         flashUser = sender;
         emit Log("Balance of contract: ", bal);
         emit Log("Repayment amount: ", repayAmount);
-        emit Log("Profit: ", bal - repayAmount);
+        emit Log("Balance of contract after the loan is repaid: ", bal - repayAmount);
     }
 }
