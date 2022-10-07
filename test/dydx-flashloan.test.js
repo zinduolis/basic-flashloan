@@ -57,13 +57,12 @@ contract("TestDyDxSoloMargin", (accounts) => {
 
 
   it("Flash loan successfully executed", async () => {
+    const tx = await testDyDxSoloMargin.initiateFlashLoan(TOKEN, 10000)
+    console.log(`${await testDyDxSoloMargin.flashUser()}`)
 
-    // await testDyDxSoloMargin.initiateFlashLoan(TOKEN, 10)
-    console.log("There shouldn't be repeated contract")
-    // const contrBal = await web3.eth.getBalance(testDyDxSoloMargin.address)
-    // const etherValue = Number(web3.utils.fromWei(contrBal, 'ether'))
-    // console.log("Deployed contract address inside IT: ", testDyDxSoloMargin.address.toString())
-    // console.log("Contract balance after the top up is: ", etherValue, " ETH")
+    for (const log of tx.logs) {
+      console.log(log.args.message, log.args.val.toString())
+    }
   })
 })
 
