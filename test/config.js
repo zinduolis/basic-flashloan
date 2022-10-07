@@ -37,4 +37,5 @@ module.exports = {
   CUSDC,
   CWBTC,
   CETH,
+  ACC0_PRIVATE_KEY
 }
