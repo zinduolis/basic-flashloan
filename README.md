@@ -1,14 +1,18 @@
-#Initiate truffle project
-truffle init
+#Description 
 
-#install money-legos package
-npm install @studydefi/money-legos
+Basic contract to execute flashloan with dydx
 
-#install bn.js
-npm install --save bn.js
+#Run in the root directory to download all the dependencies.
 
-#install npm dotenv
-npm install dotenv --save
+npm install
 
-#upload util.js file into test folder
-#create .env file with values as per .env.sample in here https://github.com/t4sk/defi-by-example
+#Fork ETH network on ganache
+
+ganache -f
+
+#Execute JavaScript Tests
+
+truffle test
+
+
+
